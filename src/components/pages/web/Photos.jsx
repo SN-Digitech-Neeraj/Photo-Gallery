@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import PhotoModal from "./modals/PhotosModal";
+import PhotoModal from "../modals/PhotosModal";
 
 const Photos = () => {
     const { id } = useParams();

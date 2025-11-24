@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 
 const CreateCollectionModal = ({ onClose, onSave }) => {
   const [name, setName] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const modalRef = useRef(null);
 
   // 🔹 Close modal when clicking outside
@@ -16,38 +18,54 @@ const CreateCollectionModal = ({ onClose, onSave }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  // 🔹 Image preview handler
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return alert("Please enter collection name");
-    onSave(name);
+    if (!image) return alert("Please upload an image");
+
+    onSave({ name, image });
+
     setName("");
+    setImage(null);
+    setPreview(null);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
-        className="bg-white w-full max-w-md rounded-2xl shadow-lg p-6 relative animate-fadeIn"
+        className="bg-[#FFF7F8] w-full max-w-md rounded-2xl shadow-xl p-6 relative animate-fadeIn border border-pink-200"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold"
+          className="absolute top-3 right-3 text-pink-700 hover:text-pink-900 text-xl font-bold"
         >
           ✕
         </button>
 
         {/* Heading */}
-        <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-          Create Collection
+        <h2 className="text-2xl font-semibold text-pink-800 mb-5 text-center">
+          💍 Create Wedding Collection
         </h2>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          
+          {/* Name Input */}
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-pink-800 mb-1"
             >
               Collection Name
             </label>
@@ -57,21 +75,51 @@ const CreateCollectionModal = ({ onClose, onSave }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter collection name"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-pink-300 rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-pink-400"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
+          {/* Image Upload */}
+          <div>
+            <label
+              htmlFor="image"
+              className="block text-sm font-medium text-pink-800 mb-1"
+            >
+              Upload Image
+            </label>
+
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full border border-pink-300 rounded-lg px-3 py-2 bg-white cursor-pointer"
+            />
+
+            {/* Preview */}
+            {preview && (
+              <div className="mt-3 flex justify-center">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded-xl border-2 border-pink-300 shadow-md"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-end gap-3 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+              className="px-4 py-2 rounded-lg border border-pink-300 text-pink-700 hover:bg-pink-100 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 shadow-md transition"
             >
               Save
             </button>

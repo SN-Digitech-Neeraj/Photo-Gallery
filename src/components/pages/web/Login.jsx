@@ -1,33 +1,38 @@
 import React, { useState } from "react";
 import { Heart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../utils/AuthToken";
+import { data, useNavigate } from "react-router-dom";
+import { login } from "../../utils/AuthToken";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAdmin } from "../../../features/admin/adminSlice";
 
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector((state) => state.admin);
 
     const [formData, setFormData] = useState({
-        username: "",
-        password: "",
+        email: "amck.sharma@gmail.com",
+        password: "Neeraj@7088887210",
     });
 
-    const [error, setError] = useState("");
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = login(formData.username, formData.password);
 
-        if (success) {
+        try {
+            const data = await dispatch(loginAdmin(formData)).unwrap();
+            console.log("Login Success:", data);
             navigate("/admin/dashboard");
-        } else {
-            setError("Invalid credentials! Try admin / 12345");
+        } catch (err) {
+            console.error("Login Failed:", err);
         }
     };
+
 
     return (
         <div
@@ -75,8 +80,8 @@ const Login = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        name="username"
-                                        value={formData.username}
+                                        name="email"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         placeholder="Enter your username"
                                         className="w-full px-4 py-2 rounded-md bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-400"

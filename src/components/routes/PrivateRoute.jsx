@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { isAuthenticated } from "./authToken";
+import { isAuthenticated } from "../utils/AuthToken";
+
 
 const PrivateRoute = ({ children }) => {
     const location = useLocation();

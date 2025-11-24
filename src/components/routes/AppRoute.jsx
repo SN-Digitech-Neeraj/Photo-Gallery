@@ -2,12 +2,12 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { adminRoute, routes } from './Routes';
-import Hero from '../pages/Hero';
+import Hero from '../pages/web/Hero';
 import WebsiteLayout from '../layouts/WebsiteLayout';
-import Login from '../pages/Login';
+import Login from '../pages/web/Login';
 import AdminLayout from '../layouts/AdminLayout';
-import PrivateRoute from '../utils/PrivateRoute';
-import Collection from '../pages/Collection';
+import Collection from '../pages/web/Collection';
+import PrivateRoute from './PrivateRoute';
 
 function AppRoute() {
     const router = createBrowserRouter([
