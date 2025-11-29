@@ -7,5 +7,6 @@ console.log("API Base URL:", BASE_URL);
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_URL}/auth/login`,
+    LOGOUT: `${API_URL}/auth/logout`,
   },
 };

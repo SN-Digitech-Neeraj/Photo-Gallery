@@ -13,17 +13,27 @@ import {
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConfirmModal from "../pages/modals/ConfirmModal";
+import { useDispatch } from "react-redux";
+import { logoutAdmin } from "../../features/admin/adminSlice";
+import FullPageLoader from "../utils/FullPageLoader";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [confirmModal, setConfirmModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // 🔹 Logout Handler
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = async () => {
+    setLoading(true);
+    const result  = await dispatch(logoutAdmin());
+    setLoading(false);
     setConfirmModal(false);
-    navigate("/login");
+    if (result.meta.requestStatus === "fulfilled") {
+      navigate("/login"); // redirect to login
+    }
   };
 
   return (
@@ -145,6 +155,9 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       >
         <LogOut size={40} className="text-rose-500" />
       </ConfirmModal>
+
+      {/* Full Page Loader */}
+      {loading && <FullPageLoader/>}
     </>
   );
 }

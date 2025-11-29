@@ -1,54 +1,43 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { adminRoute, routes } from './Routes';
-import Hero from '../pages/web/Hero';
-import WebsiteLayout from '../layouts/WebsiteLayout';
-import Login from '../pages/web/Login';
-import AdminLayout from '../layouts/AdminLayout';
-import Collection from '../pages/web/Collection';
-import PrivateRoute from './PrivateRoute';
+import { adminRoute, routes } from "./Routes";
+import Hero from "../pages/web/Hero";
+import WebsiteLayout from "../layouts/WebsiteLayout";
+import Login from "../pages/web/Login";
+import AdminLayout from "../layouts/AdminLayout";
+import Collection from "../pages/web/Collection";
+import PrivateRoute from "./PrivateRoute";
 
 function AppRoute() {
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            element: <WebsiteLayout />,
-            children: [
-                {
-                    index: true,
-                    element: (
-                        <>
-                            <Hero />
-                            <Collection />
-                        </>
-                    ),
-                },
-                ...routes
-            ],
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <WebsiteLayout />,
+      children: [
+        { index: true, element: <>
+            <Hero />
+            <Collection />
+          </> 
         },
+        ...routes,
+      ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/admin",
+      element: (
+        <PrivateRoute>
+          <AdminLayout />
+        </PrivateRoute>
+      ),
+      children: [...adminRoute],
+    },
+  ]);
 
-        // Login with No - Layout
-        {
-            path: '/login',
-            element: <Login />
-        },
-
-        // Admin Panel
-        {
-            path: '/admin',
-            element: 
-            <PrivateRoute>
-                <AdminLayout />
-            </PrivateRoute>,
-
-            children: [
-               ...adminRoute
-            ]
-        }
-    ]);
-
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
 
 export default AppRoute;

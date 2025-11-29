@@ -1,18 +1,16 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { isAuthenticated } from "../utils/AuthToken";
-
+import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ children }) => {
-    const location = useLocation();
+  const location = useLocation();
+  const { isAuthenticated } = useSelector((state) => state.admin);
 
-    if (!isAuthenticated()) {
-        // Agar user login nahi hai → redirect to login
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-    // Agar login hai → children (admin layout) show karo
-    return children;
+  return children;
 };
 
 export default PrivateRoute;
